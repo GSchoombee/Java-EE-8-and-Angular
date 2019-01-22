@@ -15,6 +15,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.jee8ng.security.boundary.JWTRequired;
 import org.jee8ng.issues.entity.Issue;
 import org.jee8ng.issues.entity.IssueEvent;
@@ -24,6 +28,7 @@ import org.jee8ng.issues.entity.IssueEvent;
  * @author prashantp.org
  */
 @Path("issues")
+@Api(value = "Issues")
 public class IssuesResource {
 
     @DefaultValue("v1")
@@ -38,12 +43,14 @@ public class IssuesResource {
 
     @GET
     @JWTRequired
+    @ApiOperation(value = "Get all issues")
     public Response getAll() {
         return Response.ok(service.getAll()).build();
     }
 
     @GET
     @Path("{id}")
+    @ApiOperation(value = "Get issue by id")
     public Response get(@PathParam("id") Long id) {
         final Optional<Issue> issueFound = service.get(id);
         if (issueFound.isPresent()) {
@@ -53,7 +60,8 @@ public class IssuesResource {
     }
 
     @POST
-    public Response add(Issue newIssue, @Context UriInfo uriInfo) {
+    @ApiOperation(value = "Add new issue")
+    public Response add(@ApiParam(value = "Issue that needs to be added", required = true) Issue newIssue, @Context UriInfo uriInfo) {
         service.add(newIssue);
         event.fire(new IssueEvent(newIssue));
         return Response.created(getLocation(uriInfo, newIssue.getId())).build();
@@ -61,6 +69,7 @@ public class IssuesResource {
 
     @PUT
     @Path("{id}")
+    @ApiOperation(value = "Update existing issue")
     public Response update(@PathParam("id") Long id, Issue updated) {
         updated.setId(id);
         boolean done = service.update(updated);
@@ -72,6 +81,7 @@ public class IssuesResource {
 
     @DELETE
     @Path("{id}")
+    @ApiOperation(value = "Delete issue at id")
     public Response remove(@PathParam("id") Long id) {
         service.remove(id);
         return Response.ok().build();

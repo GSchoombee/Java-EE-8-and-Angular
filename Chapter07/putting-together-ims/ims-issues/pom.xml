@@ -19,6 +19,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.16</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>8.0</version>
@@ -34,7 +39,39 @@
     
     <build>
         <finalName>ims-issues</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>3.1.5</version>
+                <configuration>
+                    <apiSources>
+                        <apiSource>
+                            <springmvc>false</springmvc>
+                            <locations>org.jee8ng.issues.boundary</locations>
+                            <schemes>http</schemes>
+                            <host>localhost:8085</host>
+                            <basePath>/${project.build.finalName}/resources
+                            </basePath>
+                            <info>
+                                <title>Issues API</title>
+                                <version>v1</version>
+                                <description>Issues rest endpoints</description>
+                            </info>
+                            <outputFormats>yaml</outputFormats>
+                            <swaggerDirectory>${basedir}/src/main/webapp</swaggerDirectory>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-    
-    
 </project>

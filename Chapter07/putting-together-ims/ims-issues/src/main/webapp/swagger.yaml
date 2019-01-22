@@ -1,0 +1,121 @@
+---
+swagger: "2.0"
+info:
+  description: "Issues rest endpoints"
+  version: "v1"
+  title: "Issues API"
+host: "localhost:8085"
+basePath: "/ims-issues/resources"
+tags:
+- name: "Issues"
+schemes:
+- "http"
+paths:
+  /issues:
+    get:
+      tags:
+      - "Issues"
+      summary: "Get all issues"
+      description: ""
+      operationId: "getAll"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+    post:
+      tags:
+      - "Issues"
+      summary: "Add new issue"
+      description: ""
+      operationId: "add"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Issue that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Issue"
+      responses:
+        default:
+          description: "successful operation"
+  /issues/{id}:
+    get:
+      tags:
+      - "Issues"
+      summary: "Get issue by id"
+      description: ""
+      operationId: "get"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        default:
+          description: "successful operation"
+    put:
+      tags:
+      - "Issues"
+      summary: "Update existing issue"
+      description: ""
+      operationId: "update"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        default:
+          description: "successful operation"
+    delete:
+      tags:
+      - "Issues"
+      summary: "Delete issue at id"
+      description: ""
+      operationId: "remove"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        default:
+          description: "successful operation"
+definitions:
+  Issue:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      assignedTo:
+        $ref: "#/definitions/User"
+      created:
+        type: "string"
+        format: "date-time"
+      modified:
+        type: "string"
+        format: "date-time"
+  User:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        minLength: 2
+        maxLength: 20
+      issues:
+        type: "array"
+        items:
+          $ref: "#/definitions/Issue"
